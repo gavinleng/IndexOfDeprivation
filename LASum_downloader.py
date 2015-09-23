@@ -33,7 +33,7 @@ def download(url, sheet, reqFields, outPath):
     except urllib.error.URLError as e:
         sys.exit('excel download URLError = ' + str(e.args))
     except Exception:
-        print ('excel file download error')
+        print('excel file download error')
         import traceback
         sys.exit('generic exception: ' + traceback.format_exc())
 
@@ -41,11 +41,11 @@ def download(url, sheet, reqFields, outPath):
     xd = pd.ExcelFile(socket)
     df = xd.parse(sheet)
 
-    print ('data reading------')
+    print('data reading------')
     raw_data = df.loc[:, col]
 
     #save csv file
-    print ('writing to file ' + dName)
+    print('writing to file ' + dName)
     dfw = pd.DataFrame(raw_data, columns=col)
     dfw.to_csv(dName, index=False)
     print('Requested data has been extracted and saved as ' + dName)
@@ -72,6 +72,6 @@ if args.configFile == None:
 
 with open(args.configFile) as json_file:
     oConfig = json.load(json_file)
-    print ("read config file")
+    print("read config file")
 
 download(oConfig["url"], oConfig["sheet"], oConfig["reqFields"], oConfig["outPath"])
