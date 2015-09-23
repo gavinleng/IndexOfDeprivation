@@ -44,12 +44,30 @@ def download(url, sheet, reqFields, outPath):
     print('data reading------')
     raw_data = df.loc[:, col]
 
+    #check the no digit data
+    check_field = 'Rank of Local Concentration'
+    inrow = checkRaw(raw_data, check_field)
+
+    raw_data_w = raw_data.drop(raw_data.index[inrow])
+
     #save csv file
     print('writing to file ' + dName)
-    dfw = pd.DataFrame(raw_data, columns=col)
+    dfw = pd.DataFrame(raw_data_w, columns=col)
     dfw.to_csv(dName, index=False)
     print('Requested data has been extracted and saved as ' + dName)
     print("finished")
+
+def checkRaw(data, field):
+    inrow = []
+    for i in range(len(data)):
+        if str(data.loc[i, field]).isdigit() != True:
+            inrow.append(i)
+            print('------------------------------------')
+            print('the value is not a digit number at:')
+            print(data.loc[i, :])
+
+    return inrow
+
 
 parser = argparse.ArgumentParser(description='Extract online Index of Deprivation Excel file LA Summaries ID 2010 to .csv file.')
 parser.add_argument("--generateConfig", "-g", help="generate a config file called config_LASum.json", action="store_true")
